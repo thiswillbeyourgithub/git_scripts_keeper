@@ -6,6 +6,8 @@ A simple bash utility that automatically commits changes in multiple git reposit
 
 Git Script Keeper is a bash script that helps you manage multiple git repositories by automatically detecting changes and committing them. It reads a list of repository paths from a file and processes each repository, committing any changes with an auto-generated commit message.
 
+Inspired by etckeeper, Git Script Keeper was created to track changes in scripts and configuration folders that aren't covered by system configuration management tools.
+
 ## Features
 
 - Automatically detects changes in multiple git repositories
