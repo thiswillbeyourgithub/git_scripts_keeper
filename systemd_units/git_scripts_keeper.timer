@@ -1,0 +1,10 @@
+[Unit]
+Description=Run git_scripts_keeper every few minutes
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=10m
+Unit=git_scripts_keeper.service
+
+[Install]
+WantedBy=timers.target
