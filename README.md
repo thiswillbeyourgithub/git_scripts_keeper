@@ -1,4 +1,4 @@
-# Git Script Keeper
+# Git Scripts Keeper
 
 A simple bash utility that automatically commits changes in multiple git repositories.
 
@@ -19,7 +19,7 @@ Inspired by etckeeper, Git Script Keeper was created to track changes in scripts
 ## Usage
 
 ```bash
-./git_script_keeper.sh <path_to_repo_list_file>
+./git_scripts_keeper.sh <path_to_repo_list_file>
 ```
 
 ### Example repository list file (repos.txt):
@@ -44,7 +44,7 @@ Inspired by etckeeper, Git Script Keeper was created to track changes in scripts
 ## Installation
 
 1. Download this script via `git clone`
-2. Make it executable: `chmod +x git_script_keeper.sh`
+2. Make it executable: `chmod +x git_scripts_keeper.sh`
 3. Create a repository list file with one repository path per line into `repos.txt`.
-4. Launch via `./git_script_keeper.sh repos.txt`
+4. Launch via `./git_scripts_keeper.sh repos.txt`
 5. Optional: make it periodic via the systemd unit.
