@@ -15,6 +15,7 @@ Inspired by etckeeper, Git Script Keeper was created to track changes in scripts
 - Generates commit messages that include the list of modified files
 - Handles errors gracefully (non-existent directories, non-git repositories)
 - Supports comments and empty lines in the repository list file
+- Made to be run periodically via systemd or cron.
 
 ## Usage
 
@@ -47,4 +48,4 @@ Inspired by etckeeper, Git Script Keeper was created to track changes in scripts
 2. Make it executable: `chmod +x git_scripts_keeper.sh`
 3. Create a repository list file with one repository path per line into `repos.txt`.
 4. Launch via `./git_scripts_keeper.sh repos.txt`
-5. Optional: make it periodic via the systemd unit in the folder `systemd_units`.
+5. Optional: make it periodic via the systemd unit in the folder `systemd_units` or via cron.
