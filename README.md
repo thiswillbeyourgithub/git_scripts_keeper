@@ -41,29 +41,8 @@ Git Script Keeper is a bash script that helps you manage multiple git repositori
 
 ## Installation
 
-1. Download the script:
-   ```bash
-   curl -O https://raw.githubusercontent.com/yourusername/git-script-keeper/main/git_script_keeper.sh
-   ```
-
-2. Make it executable:
-   ```bash
-   chmod +x git_script_keeper.sh
-   ```
-
-3. Create a repository list file with one repository path per line.
-
-## License
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+1. Download this script via `git clone`
+2. Make it executable: `chmod +x git_script_keeper.sh`
+3. Create a repository list file with one repository path per line into `repos.txt`.
+4. Launch via `./git_script_keeper.sh repos.txt`
+5. Optional: make it periodic via the systemd unit.
