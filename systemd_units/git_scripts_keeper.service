@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/YOUR_PATH/git_scripts_keeper/git_scripts_keeper.sh /YOUR_PATH/git_scripts_keeper/authors_gits.txt
+ExecStart=/YOUR_PATH/git_scripts_keeper/git_scripts_keeper.sh /YOUR_PATH/git_scripts_keeper/your_list_of_gits_in_a.txt
 
 [Install]
 WantedBy=default.target
