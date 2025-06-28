@@ -77,7 +77,7 @@ while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
       echo "Initializing git repository in $REPO_PATH"
       git init
     else
-      echo "Error: $REPO_PATH is not a git repository"
+      echo "Error: $REPO_PATH is not a git repository. Use --create-repos to initialize it."
       exit 1
     fi
   fi
