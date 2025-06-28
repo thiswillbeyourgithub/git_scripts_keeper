@@ -2,31 +2,52 @@
 
 # Function to display help message
 show_help() {
-  echo "Usage: $0 <path_to_repo_list_file>"
+  echo "Usage: $0 [--create-repos] <path_to_repo_list_file>"
   echo
   echo "Automatically commits changes in git repositories listed in the specified file."
   echo
   echo "Options:"
-  echo "  -h, --help    Display this help message and exit"
+  echo "  -h, --help       Display this help message and exit"
+  echo "  --create-repos   Initialize git repositories if .git directory is missing"
   echo
   echo "The repo list file should contain one repository path per line."
   echo "Empty lines and lines starting with # are ignored."
   exit 0
 }
 
-# Check for help flags
-if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-  show_help
-fi
+# Initialize variables
+CREATE_REPOS=false
+REPO_LIST_FILE=""
 
-# Check if a file path is provided as an argument
-if [ $# -ne 1 ]; then
-  echo "Usage: $0 <path_to_repo_list_file>"
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -h|--help)
+      show_help
+      ;;
+    --create-repos)
+      CREATE_REPOS=true
+      shift
+      ;;
+    *)
+      if [ -z "$REPO_LIST_FILE" ]; then
+        REPO_LIST_FILE="$1"
+        shift
+      else
+        echo "Error: Too many arguments"
+        echo "Use '$0 --help' for more information."
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+# Check if a file path is provided
+if [ -z "$REPO_LIST_FILE" ]; then
+  echo "Usage: $0 [--create-repos] <path_to_repo_list_file>"
   echo "Use '$0 --help' for more information."
   exit 1
 fi
-
-REPO_LIST_FILE="$1"
 
 # Check if the file exists
 if [ ! -f "$REPO_LIST_FILE" ]; then
@@ -50,10 +71,15 @@ while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
   # Change to repository directory
   cd "$REPO_PATH" || continue
   
-  # Check if it's a git repository
+  # Check if it's a git repository, initialize if --create-repos flag is set
   if [ ! -d ".git" ]; then
-    echo "Error: $REPO_PATH is not a git repository"
-    exit 1
+    if [ "$CREATE_REPOS" = true ]; then
+      echo "Initializing git repository in $REPO_PATH"
+      git init
+    else
+      echo "Error: $REPO_PATH is not a git repository"
+      exit 1
+    fi
   fi
   
   # Check if there are changes
