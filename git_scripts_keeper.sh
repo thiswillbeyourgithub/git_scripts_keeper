@@ -64,8 +64,8 @@ while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
   
   # Check if directory exists
   if [ ! -d "$REPO_PATH" ]; then
-    echo "Error: Directory $REPO_PATH does not exist, skipping"
-    continue
+    echo "Error: Directory $REPO_PATH does not exist"
+    exit 1
   fi
   
   # Change to repository directory
