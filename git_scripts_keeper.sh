@@ -52,8 +52,8 @@ while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
   
   # Check if it's a git repository
   if [ ! -d ".git" ]; then
-    echo "Error: $REPO_PATH is not a git repository, skipping"
-    continue
+    echo "Error: $REPO_PATH is not a git repository"
+    exit 1
   fi
   
   # Check if there are changes
