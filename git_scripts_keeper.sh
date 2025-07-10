@@ -74,6 +74,19 @@ while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
   # Check if it's a git repository, initialize if --create-repos flag is set
   if [ ! -d ".git" ]; then
     if [ "$CREATE_REPOS" = true ]; then
+      # Check if .gitignore already exists (unexpected in non-git directory)
+      if [ -f ".gitignore" ]; then
+        echo "Error: Found .gitignore file in $REPO_PATH but no .git directory. This is unexpected."
+        exit 1
+      fi
+      
+      # Create .gitignore file with standard patterns
+      echo "Creating .gitignore file in $REPO_PATH"
+      cat > .gitignore << EOF
+*.lock
+*.log
+EOF
+      
       echo "Initializing git repository in $REPO_PATH"
       git init
     else
