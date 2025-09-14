@@ -72,7 +72,7 @@ while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
   cd "$REPO_PATH" || continue
   
   # Check if it's a git repository, initialize if --create-repos flag is set
-  if [ ! -d ".git" ]; then
+  if [ ! -d ".git" ] && [ ! -f ".git" ]; then
     if [ "$CREATE_REPOS" = true ]; then
       # Check if .gitignore already exists (unexpected in non-git directory)
       if [ -f ".gitignore" ]; then
