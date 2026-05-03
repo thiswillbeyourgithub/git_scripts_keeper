@@ -105,10 +105,16 @@ EOF
   git add .
   
   # Get list of modified files
-  MODIFIED_FILES=$(git diff --cached --name-only | tr '\n' ' ')
-  
+  FILE_COUNT=$(git diff --cached --name-only | wc -l)
+  MODIFIED_FILES=$(git diff --cached --name-only | head -20 | tr '\n' ' ')
+  if [ "$FILE_COUNT" -gt 20 ]; then
+    COMMIT_MSG="Auto-commit: $MODIFIED_FILES... ($FILE_COUNT files total)"
+  else
+    COMMIT_MSG="Auto-commit: $MODIFIED_FILES"
+  fi
+
   # Commit with modified files as message
-  git commit -m "Auto-commit: $MODIFIED_FILES"
+  git commit -m "$COMMIT_MSG"
   
   echo "Changes committed in $REPO_PATH"
 done < "$REPO_LIST_FILE"
