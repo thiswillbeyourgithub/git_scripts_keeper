@@ -55,6 +55,15 @@ if [ ! -f "$REPO_LIST_FILE" ]; then
   exit 1
 fi
 
+# Repos where a git step failed. We keep going so one broken repo (e.g. a stale
+# index.lock) does not block the others, but exit non-zero at the end so systemd
+# marks the unit as failed instead of silently pretending everything was committed.
+FAILED_REPOS=()
+fail() {
+  echo "Error: $1 in $REPO_PATH" >&2
+  FAILED_REPOS+=("$REPO_PATH")
+}
+
 # Read repositories from the file
 while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
   # Skip empty lines and comments
@@ -69,7 +78,7 @@ while IFS= read -r REPO_PATH || [ -n "$REPO_PATH" ]; do
   fi
   
   # Change to repository directory
-  cd "$REPO_PATH" || continue
+  cd "$REPO_PATH" || { fail "cd failed"; continue; }
   
   # Check if it's a git repository, initialize if --create-repos flag is set
   if [ ! -d ".git" ] && [ ! -f ".git" ]; then
@@ -96,13 +105,22 @@ EOF
   fi
   
   # Check if there are changes
-  if [ -z "$(git status --porcelain --ignore-submodules)" ]; then
+  # Capture separately: an erroring git status prints nothing, which would
+  # otherwise be mistaken for "no changes".
+  if ! STATUS=$(git status --porcelain --ignore-submodules); then
+    fail "git status failed"
+    continue
+  fi
+  if [ -z "$STATUS" ]; then
     echo "No changes to commit in $REPO_PATH"
     continue
   fi
   
   # Add all changes
-  git add .
+  if ! git add .; then
+    fail "git add failed"
+    continue
+  fi
   
   # Get list of modified files
   FILE_COUNT=$(git diff --cached --name-only | wc -l)
@@ -114,7 +132,16 @@ EOF
   fi
 
   # Commit with modified files as message
-  git commit -m "$COMMIT_MSG"
-  
+  if ! git commit -m "$COMMIT_MSG"; then
+    fail "git commit failed"
+    continue
+  fi
+
   echo "Changes committed in $REPO_PATH"
 done < "$REPO_LIST_FILE"
+
+if [ ${#FAILED_REPOS[@]} -gt 0 ]; then
+  echo "Error: ${#FAILED_REPOS[@]} repo(s) failed:" >&2
+  printf '  %s\n' "${FAILED_REPOS[@]}" >&2
+  exit 1
+fi

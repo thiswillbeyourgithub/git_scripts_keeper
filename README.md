@@ -14,6 +14,7 @@ Inspired by etckeeper, Git Script Keeper was created to track changes in scripts
 - Skips repositories with no changes
 - Generates commit messages that include the list of modified files
 - Handles errors gracefully (non-existent directories, non-git repositories)
+- Fails loudly: if any `git status`/`add`/`commit` fails (e.g. a stale `.git/index.lock`), it still processes the remaining repos, then lists the failed ones and exits 1 so systemd marks the unit as failed
 - Supports comments and empty lines in the repository list file
 - Made to be run periodically via systemd or cron.
 
